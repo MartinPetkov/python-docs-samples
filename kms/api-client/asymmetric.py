@@ -62,8 +62,8 @@ def decryptRSA(ciphertext, client, key_path):
                     .asymmetricDecrypt(name=key_path,
                                        body=request_body)
     response = request.execute()
-    plaintext = base64.b64decode(response['plaintext'])
-    return plaintext
+    plaintext = response.get('plaintext', None)
+    return base64.b64decode(plaintext) if plaintext else None
 # [END kms_decrypt_rsa]
 
 
@@ -108,7 +108,8 @@ def signAsymmetric(message, client, key_path):
                     .asymmetricSign(name=key_path,
                                     body={'digest': digest_JSON})
     response = request.execute()
-    return base64.b64decode(response.get('signature', None))
+    signature = response.get('signature', None)
+    return base64.b64decode(signature) if signature else None
 # [END kms_sign_asymmetric]
 
 
